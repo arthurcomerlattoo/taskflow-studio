@@ -54,7 +54,7 @@ const SUBJECT_COLORS: Record<string, string> = {
 };
 
 function Index() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
   const [subject, setSubject] = useState<string>(SUBJECTS[0]);
@@ -64,32 +64,32 @@ function Index() {
   useEffect(() => {
     const load = async () => {
       const { data, error } = await supabase
-        .from("tasks")
+        .from("todos")
         .select("*")
         .order("created_at", { ascending: false });
       if (error) {
         toast.error("Erro ao carregar tarefas");
       } else {
-        setTasks((data ?? []) as Task[]);
+        setTodos((data ?? []) as Todo[]);
       }
       setLoading(false);
     };
     load();
 
     const channel = supabase
-      .channel("tasks-changes")
+      .channel("todos-changes")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "tasks" },
+        { event: "*", schema: "public", table: "todos" },
         (payload) => {
           if (payload.eventType === "INSERT") {
-            setTasks((prev) => {
-              const t = payload.new as Task;
+            setTodos((prev) => {
+              const t = payload.new as Todo;
               if (prev.some((p) => p.id === t.id)) return prev;
               return [t, ...prev];
             });
           } else if (payload.eventType === "DELETE") {
-            setTasks((prev) => prev.filter((t) => t.id !== (payload.old as Task).id));
+            setTodos((prev) => prev.filter((t) => t.id !== (payload.old as Todo).id));
           }
         },
       )
@@ -101,8 +101,8 @@ function Index() {
   }, []);
 
   const filtered = useMemo(
-    () => (filter === "all" ? tasks : tasks.filter((t) => t.subject === filter)),
-    [tasks, filter],
+    () => (filter === "all" ? todos : todos.filter((t) => t.subject === filter)),
+    [todos, filter],
   );
 
   const handleAdd = async (e: React.FormEvent) => {
@@ -110,7 +110,7 @@ function Index() {
     if (!title.trim()) return;
     setSubmitting(true);
     const { error } = await supabase
-      .from("tasks")
+      .from("todos")
       .insert({ title: title.trim(), subject });
     if (error) {
       toast.error("Erro ao adicionar tarefa");
@@ -122,14 +122,14 @@ function Index() {
   };
 
   const handleDelete = async (id: string) => {
-    const { error } = await supabase.from("tasks").delete().eq("id", id);
+    const { error } = await supabase.from("todos").delete().eq("id", id);
     if (error) toast.error("Erro ao excluir");
     else toast.success("Tarefa removida");
   };
 
   const subjectsInUse = useMemo(
-    () => Array.from(new Set(tasks.map((t) => t.subject))),
-    [tasks],
+    () => Array.from(new Set(todos.map((t) => t.subject))),
+    [todos],
   );
 
   return (
@@ -184,7 +184,7 @@ function Index() {
             variant={filter === "all" ? "default" : "outline"}
             onClick={() => setFilter("all")}
           >
-            Todas ({tasks.length})
+            Todas ({todos.length})
           </Button>
           {subjectsInUse.map((s) => (
             <Button
@@ -193,7 +193,7 @@ function Index() {
               variant={filter === s ? "default" : "outline"}
               onClick={() => setFilter(s)}
             >
-              {s} ({tasks.filter((t) => t.subject === s).length})
+              {s} ({todos.filter((t) => t.subject === s).length})
             </Button>
           ))}
         </div>
@@ -209,22 +209,22 @@ function Index() {
           </Card>
         ) : (
           <ul className="space-y-2">
-            {filtered.map((task) => (
-              <li key={task.id}>
+            {filtered.map((todo) => (
+              <li key={todo.id}>
                 <Card className="flex items-center gap-3 p-4 transition-shadow hover:shadow-md">
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-medium">{task.title}</p>
+                    <p className="truncate font-medium">{todo.title}</p>
                   </div>
                   <Badge
                     variant="secondary"
-                    className={SUBJECT_COLORS[task.subject] ?? ""}
+                    className={SUBJECT_COLORS[todo.subject] ?? ""}
                   >
-                    {task.subject}
+                    {todo.subject}
                   </Badge>
                   <Button
                     size="icon"
                     variant="ghost"
-                    onClick={() => handleDelete(task.id)}
+                    onClick={() => handleDelete(todo.id)}
                     className="text-muted-foreground hover:text-destructive"
                   >
                     <Trash2 className="h-4 w-4" />
