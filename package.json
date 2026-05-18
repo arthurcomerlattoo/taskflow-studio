@@ -1,5 +1,6 @@
 {
   "name": "tanstack_start_ts",
+  "homepage": "https://arthurcomerlattoo.github.io/taskflow-studio",
   "private": true,
   "sideEffects": false,
   "type": "module",
@@ -9,7 +10,9 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.25.5",
