@@ -20,7 +20,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Task = {
+type Todo = {
   id: string;
   title: string;
   subject: string;
