@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Altere para 'master' se sua branch principal tiver esse nome
+      - main  # Mude para master se for o caso
 
 permissions:
   contents: read
@@ -23,11 +23,10 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-node: 20
-          cache: 'npm'
+          node-version: 20
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build project with Env Variables
         env:
@@ -38,7 +37,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist' # Se o Lovable gerar o build em outra pasta (como 'build' ou 'out'), mude aqui
+          path: './dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
