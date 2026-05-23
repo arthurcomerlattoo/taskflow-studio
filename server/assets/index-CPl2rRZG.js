@@ -1,5 +1,5 @@
-import { S as reactExports, J as jsxRuntimeExports, a as React, R as React$1 } from "./server-CDxxfXiu.js";
-import { r as reactDomExports, R as ReactDOM } from "./router-CzoJJSr5.js";
+import { S as reactExports, J as jsxRuntimeExports, a as React, R as React$1 } from "./server-CMmM5iJ3.js";
+import { r as reactDomExports, R as ReactDOM } from "./router-BI0Hb0Cr.js";
 import "node:async_hooks";
 import "node:stream/web";
 import "node:stream";
@@ -20609,8 +20609,10 @@ function shouldShowDeprecationWarning() {
   return parseInt(versionMatch[1], 10) <= 18;
 }
 if (shouldShowDeprecationWarning()) console.warn("⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217");
-const supabaseUrl = "https://czhybesqyonotfcepgdh.supabase.co";
-const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN6aHliZXNxeW9ub3RmY2VwZ2RoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDc1MjAsImV4cCI6MjA5NDYyMzUyMH0.tzjQt2L6FaBNRWJPG5oFX-DZNuca71R9rOvIeksBvfE";
+const envUrl = "https://czhybesqyonotfcepgdh.supabase.co";
+const envAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN6aHliZXNxeW9ub3RmY2VwZ2RoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDc1MjAsImV4cCI6MjA5NDYyMzUyMH0.tzjQt2L6FaBNRWJPG5oFX-DZNuca71R9rOvIeksBvfE";
+const supabaseUrl = envUrl;
+const supabaseAnonKey = envAnonKey;
 const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     storage: typeof window !== "undefined" ? localStorage : void 0,
